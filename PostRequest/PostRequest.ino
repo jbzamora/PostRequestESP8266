@@ -16,8 +16,8 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 
-const char* ssid = "SPD";
-const char* password = "SOLOPARADIOSES";
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASS";
 
 String timezone = "America/Guayaquil";
 
