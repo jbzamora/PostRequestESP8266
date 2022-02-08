@@ -17,7 +17,7 @@ https://dl.espressif.com/dl/package_esp32_index.json
 ## Créditos y Soporte :briefcase:
 La programación e implementación de los dispositivos electrónicos fue desarrollado por [**Jhonny Zamora**](https://github.com/jbzamora).
 
-Sitio Web: [www.BinaryEC.com](https://binaryec.com)
+Sitio Web: [https://BinaryEC.com](https://binaryec.com)
 
 ## Licencia :bookmark_tabs:
 
