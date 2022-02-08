@@ -14,7 +14,10 @@
 *****************************************************************************/
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
+#include <WiFiClientSecureBearSSL.h>
+
+//fingerprint of binaryec.com valid until 04/05/2022
+const uint8_t fingerprint[20] = {0x9F, 0xEE, 0x15, 0xFD, 0x50, 0x46, 0xF0, 0x45, 0xBD, 0xCB, 0x5C, 0x60, 0xDE, 0x0F, 0xE3, 0x21, 0x0B, 0x8C, 0x8A, 0x76};
 
 const char* ssid = "YOUR_SSID";
 const char* password = "YOUR_PASS";
@@ -48,16 +51,16 @@ void setup() {
 void loop() {
   String json = "{\"timezone\":\"" + timezone + "\"}";
 
-  WiFiClient client;  
-  HTTPClient http;
+  std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
+  client->setFingerprint(fingerprint);
+  HTTPClient https;
+  https.begin(*client, "https://binaryec.com/timezone/index.php");
+  https.addHeader("Content-Type", "application/json");         //Specify content-type header
 
-  http.begin(client, "http://binaryec.com/timezone/index.php");      //Specify destination for HTTP request
-  http.addHeader("Content-Type", "application/json");         //Specify content-type header
-
-  int httpResponseCode = http.POST(json);   //Send actual POST request
+  int httpResponseCode = https.POST(json);   //Send actual POST request
 
   if (httpResponseCode > 0) {
-    String response = http.getString();   //Get the response to the request
+    String response = https.getString();   //Get the response to the request
     Serial.print("Code: "); Serial.println(httpResponseCode);     //Print return code
     Serial.print("Server Response: "); Serial.println(response);  //Print request answer
   }
@@ -65,7 +68,7 @@ void loop() {
     Serial.print("Error on sending POST: ");
     Serial.println(httpResponseCode);
   }
-  http.end();  //Free resources
+  https.end();  //Free resources
 
   delay(5000);
 }
